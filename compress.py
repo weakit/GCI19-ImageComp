@@ -41,7 +41,7 @@ def calc_quality(img):
 
 def read_image(name):
     """Reads an image file"""
-    return Image.open(os.path.join(RDIR, name))
+    return Image.open(os.path.join(RDIR, name)).convert("RGB")
 
 
 def calc_size(w0, h0):
