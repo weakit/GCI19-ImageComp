@@ -7,7 +7,7 @@ from io import BytesIO
 RDIR = "./"
 SDIR = "compressed/"
 maxW = 400  # max width
-maxH = 300  # max height
+maxH = 400  # max height
 maxS = 64000  # max filesize (in bytes)
 VERBOSE = True
 
@@ -24,7 +24,7 @@ def calc_quality(img):
         quality -= 10
         f = BytesIO()
         img.save(f, format='JPEG', quality=quality)
-    
+
     # possible optimization
 
     quality += 10
@@ -35,7 +35,7 @@ def calc_quality(img):
         quality -= 1
         f = BytesIO()
         img.save(f, format='JPEG', quality=quality)
-    
+
     return quality
 
 
@@ -69,12 +69,19 @@ def byte(num):
         num /= 1024.0
 
 
+def ext(f):
+    """Changes the extension of the a give file to jpeg"""
+    return os.path.splitext(f)[0] + '.jpg'
+
+
 def compress(file):
+    """Compresses the file and saves it to disk"""
     img = read_image(file)
     smol = resize(img, *calc_size(*img.size))
-    smol.save(os.path.join(RDIR, SDIR, file), format="JPEG", quality=calc_quality(smol))
+    smol.save(os.path.join(RDIR, SDIR, ext(file)), format="JPEG", quality=calc_quality(smol))
     if VERBOSE:
-        print(file, '\t', byte(os.stat(os.path.join(RDIR, file)).st_size), '->', byte(os.stat(os.path.join(RDIR, SDIR, file)).st_size))
+        print(file, '\t', byte(os.stat(os.path.join(RDIR, file)).st_size), '->',
+              byte(os.stat(os.path.join(RDIR, SDIR, ext(file))).st_size))
 
 
 def mkdir():
@@ -96,10 +103,10 @@ def get_images():
 
 
 if __name__ == "__main__":
-    dir = input("Enter directory with images (enter to use working dir.): ")
-    if dir:
-        if os.path.exists(dir):
-            RDIR = dir
+    wdir = input("Enter directory with images (enter to use working dir.): ")
+    if wdir:
+        if os.path.exists(wdir):
+            RDIR = wdir
         else:
             print("Invalid directory.")
             exit(1)
