@@ -48,8 +48,9 @@ def calc_size(w0, h0):
     """Calculate new image size"""
     if h0 <= maxH and w0 <= maxW:
         return w0, h0
-    if h0 > maxH:
-        w, h = (maxH / h0) * w0, maxH
+    w, h = w0, h0
+    if h > maxH:
+        w, h = (maxH / h) * w, maxH
     if w > maxW:
         w, h = maxW, (maxW / w) * h
     return round(w), round(h)
